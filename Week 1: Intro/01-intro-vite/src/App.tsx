@@ -2,10 +2,20 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+function impureAssoc(key: string, value: number, obj: Record<string, any>) {
+  obj[key] = value;
+  return obj;
+};
 
 function App() {
   const [count, setCount] = useState(0)
   const now = new Date();
+  const person = { name: "Bobo"};
+  const result = impureAssoc('shoeSize', 400, person);
+  console.log("result: ");
+  console.log(result);
+  console.log("person: ");
+  console.log(person);
 
   return (
     <>
