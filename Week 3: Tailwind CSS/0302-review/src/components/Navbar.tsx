@@ -1,14 +1,13 @@
-import "./Navbar.css";
 function Navbar() {
   return (
-    <nav className="navbar">
-      <div className="logo">Logo</div>
-      <ul className="nav-list">
-        <li className="nav-item">Home</li>
-        <li className="nav-item">About</li>
-        <li className="nav-item">Contact</li>
+    <nav className="flex flex-col sm:flex-row items-center p-4 gap-y-4 sm:gap-y-0 sm:gap-x-4">
+      <div className="text-3xl font-bold">Logo</div>
+      <ul className="flex flex-col sm:flex-row items-center gap-y-4 sm:gap-y-0 sm:gap-x-4">
+        <li>Home</li>
+        <li>About</li>
+        <li>Contact</li>
       </ul>
-      <button className="login-btn">Login</button>
+      <button>Login</button>
     </nav>
   );
 };
