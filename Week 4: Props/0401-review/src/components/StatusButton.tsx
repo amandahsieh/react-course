@@ -1,8 +1,11 @@
-function StatusButton() {
+function StatusButton(
+    { defaultStatus = 'not started' }:
+    { defaultStatus?: 'not started' | 'process' | 'done' | 'archived' }
+) {
     return (
         <select
           className="text-sm border rounded px-2 py-1 text-gray-600 focus:outline-none"
-          defaultValue="not started"
+          defaultValue={ defaultStatus }
         >
           <option value="not started">Not Started</option>
           <option value="process">In Process</option>
