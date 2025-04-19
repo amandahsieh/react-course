@@ -1,18 +1,12 @@
 function StatusButton(
-    { defaultStatus = 'not started' }:
-    { defaultStatus?: 'not started' | 'process' | 'done' | 'archived' }
+    { defaultStatus = 'Not Started' }:
+    { defaultStatus?: 'Not Started' | 'Progress' | 'Done' | 'Archived' | undefined }
 ) {
     return (
-        <select
-          className="text-sm border rounded px-2 py-1 text-gray-600 focus:outline-none"
-          defaultValue={ defaultStatus }
-        >
-          <option value="not started">Not Started</option>
-          <option value="process">In Process</option>
-          <option value="done">Done</option>
-          <option value="archived">Archived</option>
-        </select>
-    )
+        <button className={`text-sm border w-28 rounded px-2 py-1 focus:outline-none`}>
+            {defaultStatus}
+        </button>
+    );
 }
 
 export default StatusButton
