@@ -1,34 +1,35 @@
-import TodoItem from './components/TodoItem.tsx';
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
-  type Status = "Not Started" | "Progress" | "Done" | "Archived";
-  const todoList: { id: number; itemName?: string; dueDate?: string; defaultStatus?: Status }[] = [
-    { id: 1, itemName: 'Todo 1', dueDate: '20250421', defaultStatus: 'Progress' },
-    { id: 2, itemName: 'Todo 2' },
-    { id: 3, itemName: 'Todo 3', dueDate: '20250422', defaultStatus: 'Done' },
-    { id: 4, itemName: 'Todo 4',                      defaultStatus: 'Archived' },
-    { id: 5, itemName: 'Todo 5' },
-    { id: 6, itemName: 'Todo 6', dueDate: '20250424', defaultStatus: 'Not Started' },
-    { id: 7, itemName: 'Todo 7', dueDate: '20250425', defaultStatus: 'Progress' },
-    { id: 8, itemName: 'Todo 8', dueDate: '20250426', defaultStatus: 'Done' },
-    { id: 9}
-  ]
+  const [count, setCount] = useState(0)
+
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-2xl font-bold text-center mb-6">Todo List</h1>
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md p-4 space-y-4">
-        {todoList.map(todo => (
-          <TodoItem
-            key={todo.id}
-            itemName={todo.itemName}
-            dueDate={todo.dueDate}
-            defaultStatus={todo.defaultStatus}
-          />
-        ))}
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
       </div>
-    </div>
-  );
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
 
-
-export default App;
+export default App
