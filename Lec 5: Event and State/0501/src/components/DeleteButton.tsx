@@ -1,14 +1,6 @@
-function DeleteButton( {taskName="Unnamed"}: {taskName?: string} ) {
-    function DeleteHandler(taskName: string) {
-        alert('Delete ' + taskName);
-    }
+function DeleteButton() {
     return (
-        <button 
-            className="text-sm text-red-500 hover:underline" 
-            onClick={() => {DeleteHandler(taskName)}}
-        >
-            Delete
-        </button>
+        <button className="text-sm text-red-500 hover:underline">Delete</button>
     )
 }
 
