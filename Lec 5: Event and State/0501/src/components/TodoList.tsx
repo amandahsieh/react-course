@@ -9,6 +9,8 @@ interface Todo {
 }
 
 function TodoList() {
+    const [newItemName, setNewItemName] = useState('');
+    const [newDueDate, setNewDueDate] = useState('');
     const [todos, setTodos] = useState<Todo[]>([
         { id: 1, itemName: 'Todo 1', dueDate: '20250421', status: 'Progress' },
         { id: 2, itemName: 'Todo 2', dueDate: '20250422', status: 'Not Started' },
@@ -41,18 +43,56 @@ function TodoList() {
         setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
     }
 
-    return (
-        <div>
-        {todos.map(todo => (
-            <TodoItem
-            key={todo.id}
-            todo={todo}
-            onStatusChange={() => handleStatusChange(todo.id)}
-            onDelete={() => handleDelete(todo.id)}
+    function handleAddTodo() {
+        if (newItemName.trim() === '') return;
+        const newTodo: Todo = {
+          id: Date.now(),
+          itemName: newItemName,
+          dueDate: newDueDate.trim() !== '' ? newDueDate : 'No Due Date',
+          status: 'Not Started',
+        };
+        setTodos(prevTodos => [...prevTodos, newTodo]);
+        setNewItemName('');
+        setNewDueDate('');
+      }
+    
+      return (
+        <div className="p-4 space-y-4">
+          <div className="flex space-x-2">
+            <input
+              type="text"
+              className="border rounded px-2 py-1 flex-1"
+              value={newItemName}
+              onChange={(e) => setNewItemName(e.target.value)}
+              placeholder="Input New Todo..."
             />
-        ))}
+            <input
+              type="date"
+              className="border rounded px-2 py-1"
+              value={newDueDate}
+              onChange={(e) => setNewDueDate(e.target.value)}
+            />
+            <button
+              onClick={handleAddTodo}
+              className="bg-blue-500 text-white rounded px-4 py-1 hover:bg-blue-600"
+            >
+              新增
+            </button>
+          </div>
+    
+          {/* 清單區域 */}
+          <div>
+            {todos.map(todo => (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                onStatusChange={() => handleStatusChange(todo.id)}
+                onDelete={() => handleDelete(todo.id)}
+              />
+            ))}
+          </div>
         </div>
-    );
-}
+      );
+    }
 
 export default TodoList;
