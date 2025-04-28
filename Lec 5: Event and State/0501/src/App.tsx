@@ -1,34 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import TodoItem from './components/TodoItem.tsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  type Status = 'Not Started' | 'Progress' | 'Done' | 'Archived';
+  const todoList: { id: number; name?: string; dueDate?: string; defaultStatus: Status }[] = [
+    { id: 1, name: 'Task 1', dueDate: '2023-10-01', defaultStatus: 'Not Started' },
+    { id: 2, name: 'Task 2', dueDate: '2023-10-02', defaultStatus: 'Progress' },
+    { id: 3, name: 'Task 3', dueDate: '2023-10-03', defaultStatus: 'Done' },
+    { id: 4, name: 'Task 4', dueDate: '2023-10-04', defaultStatus: 'Archived' },
+    { id: 5, name: 'Task 5', dueDate: '2023-10-05', defaultStatus: 'Not Started' },
+    { id: 6, name: 'Task 6', dueDate: '2023-10-06', defaultStatus: 'Progress' },
+  ]
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='min-h-screen bg-gray-100 p-6'>
+      <h1 className="text-2xl font-bold text-center mb-4">Todo List</h1>
+      <div className="max-w-md mx-auto bg-white shadow-xl rounded-xl space-y-4 p-4">
+        {todoList.map((item) => (
+          <TodoItem
+            key={item.id}
+            itemName={item.name}
+            dueDate={item.dueDate}
+            defaultStatus={item.defaultStatus}
+          />
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
