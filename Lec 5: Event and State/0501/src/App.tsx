@@ -1,4 +1,5 @@
 import TodoItem from './components/TodoItem.tsx';
+import Nav from './components/Nav.tsx';
 
 function App() {
   type Status = 'Not Started' | 'Progress' | 'Done' | 'Archived';
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <div className='min-h-screen bg-gray-100 p-6'>
+      <Nav />
       <h1 className="text-2xl font-bold text-center mb-4">Todo List</h1>
       <div className="max-w-md mx-auto bg-white shadow-xl rounded-xl space-y-4 p-4">
         {todoList.map((item) => (

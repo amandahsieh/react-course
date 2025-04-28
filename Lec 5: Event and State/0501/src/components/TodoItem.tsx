@@ -25,9 +25,7 @@ function TodoItem(
             <div className="flex items-center space-x-4 bg-gray-300 p-2" onClick={() => {
                 alert('You are in the editing area');
             }}>
-                <Button onClick={() => {
-                    alert('Update ' + itemName + "'s status");
-                }}>
+                <Button>
                     <StatusButton defaultStatus={defaultStatus} />
                 </Button>
                 <Button>
