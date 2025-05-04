@@ -17,6 +17,7 @@ function TodoList() {
         { id: 5, itemName: 'Task 5', dueDate: '2023-10-05', status: 'Not Started' },
         { id: 6, itemName: 'Task 6', dueDate: '2023-10-06', status: 'Progress' },
     ]);
+    const [itemName, setItemName] = useState('');
     function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archived') {
         const order = ['Not Started', 'Progress', 'Done', 'Archived'];
         const nextIndex = (order.indexOf(currentStatus) + 1) % order.length;
@@ -32,8 +33,33 @@ function TodoList() {
     function handleDelete(id: number) {
         setTodos(prevTodos => prevTodos.filter((todo) => todo.id !== id));
     }
+    function handleAdd() {
+        const newTodo: Todo = {
+            id: Date.now(),
+            itemName,
+            dueDate: 'No Due Date',
+            status: 'Not Started'
+        };
+        setTodos(prev => [...prev, newTodo]);
+        setItemName('');
+    }
     return (
-        <div>
+        <div className="space-y-4">
+            <div className="flex gap-2">
+                <input
+                    type="text"
+                    placeholder="Todo Name"
+                    value={itemName}
+                    onChange={e => setItemName(e.target.value)}
+                    className="border p-2 rounded w-64"
+                />
+                <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded"
+                    onClick={handleAdd}
+                >
+                    Add
+                </button>
+            </div>
             {todos.map((todo) => (
                 <TodoItem
                     key={todo.id}
