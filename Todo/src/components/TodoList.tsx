@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import TodoItem from './TodoItem.tsx'
+import AddTodo from './AddTodo.tsx';
+import EditTodo from './EditTodo.tsx'
 
 interface Todo {
     id: number;
@@ -71,57 +73,9 @@ function TodoList() {
     }
     return (
         <div className="space-y-4">
-            <div className="flex gap-2">
-                <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="Add new task"
-                    className="border p-2 rounded"
-                />
-                <input
-                    type="date"
-                    value={formData.dueDate}
-                    onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
-                    placeholder="Set Due Date"
-                    className="border p-2 rounded"
-                />
-                <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-                    onClick={handleAdd}
-                    disabled={!formData.name.trim() || !formData.dueDate.trim()}
-                >
-                    Add
-                </button>
-            </div>
+            <AddTodo formData={formData} setFormData={setFormData} onAdd={handleAdd} />
             {editingId !== null && (
-                <div className="flex gap-2 bg-yellow-100 p-2 rounded">
-                    <input 
-                        type="text"
-                        value={editForm.name}
-                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value})}
-                        className="border p-2 rounded w-64"
-                    />
-                    <input 
-                        type="date"
-                        value={editForm.dueDate}
-                        onChange={(e) => setEditForm({ ...editForm, dueDate: e.target.value})}
-                        className="border p-2 rounded w-48"
-                    />
-                    <button
-                        onClick={handleEditSave}
-                        className="bg-green-500 text-white px-4 py-2 rounded"
-                        disabled={!editForm.name.trim() || !editForm.dueDate.trim()}
-                    >
-                        Save
-                    </button>
-                    <button
-                        onClick={handleEditCancel}
-                        className="bg-gray-400 text-white px-4 py-2 rounded"
-                    >
-                        Cancel
-                    </button>
-                </div>
+                <EditTodo editForm={editForm} setEditForm={setEditForm} onSave={handleEditSave} onCancel={handleEditCancel} />
             )}
             {todos.map((todo) => (
                 <TodoItem
