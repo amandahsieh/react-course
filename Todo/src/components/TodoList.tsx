@@ -21,6 +21,8 @@ function TodoList() {
         name: '',
         dueDate: ''
     })
+    const [editForm, setEditForm] = useState({ name: '', dueDate:'' })
+    const [editingId, setEditingId] = useState<number | null>(null);
     function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archived') {
         const order = ['Not Started', 'Progress', 'Done', 'Archived'];
         const nextIndex = (order.indexOf(currentStatus) + 1) % order.length;
@@ -47,6 +49,26 @@ function TodoList() {
         setTodos(prev => [...prev, newTodo]);
         setFormData({ name: '', dueDate: ''});
     }
+    function handleEditStart(todo: Todo){
+        setEditingId(todo.id);
+        setEditForm({ name: todo.itemName, dueDate: todo.dueDate})
+    }
+    function handleEditSave() {
+        if (!editForm.name.trim() || !editForm.dueDate.trim()) return;
+        setTodos( prev =>
+            prev.map(todo => 
+                todo.id === editingId
+                    ? {...todo, itemName: editForm.name, dueDate: editForm.dueDate}
+                    : todo
+            )
+        );
+        setEditingId(null);
+        setEditForm({ name: '', dueDate: ''});
+    }
+    function handleEditCancel() {
+        setEditingId(null);
+        setEditForm({ name: '', dueDate: ''});
+    }
     return (
         <div className="space-y-4">
             <div className="flex gap-2">
@@ -72,12 +94,42 @@ function TodoList() {
                     Add
                 </button>
             </div>
+            {editingId !== null && (
+                <div className="flex gap-2 bg-yellow-100 p-2 rounded">
+                    <input 
+                        type="text"
+                        value={editForm.name}
+                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value})}
+                        className="border p-2 rounded w-64"
+                    />
+                    <input 
+                        type="date"
+                        value={editForm.dueDate}
+                        onChange={(e) => setEditForm({ ...editForm, dueDate: e.target.value})}
+                        className="border p-2 rounded w-48"
+                    />
+                    <button
+                        onClick={handleEditSave}
+                        className="bg-green-500 text-white px-4 py-2 rounded"
+                        disabled={!editForm.name.trim() || !editForm.dueDate.trim()}
+                    >
+                        Save
+                    </button>
+                    <button
+                        onClick={handleEditCancel}
+                        className="bg-gray-400 text-white px-4 py-2 rounded"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            )}
             {todos.map((todo) => (
                 <TodoItem
                     key={todo.id}
                     todo={todo}
                     onStatusChange={() => handleStatusChange(todo.id)}
                     onDelete={() => handleDelete(todo.id)}
+                    onEdit={() => handleEditStart(todo)}
                 />
             ))}
         </div>

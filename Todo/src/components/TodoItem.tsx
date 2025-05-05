@@ -13,10 +13,11 @@ function Button( { onClick, children }: { onClick?: () => void, children: React.
 }
 
 function TodoItem(
-    { todo, onStatusChange, onDelete}:
+    { todo, onStatusChange, onDelete, onEdit}:
     { todo: { itemName: string, dueDate: string, status: 'Not Started' | 'Progress' | 'Done' | 'Archived' }, 
         onStatusChange?: () => void;
         onDelete?: () => void;
+        onEdit?: () => void;
     }
 ) {
     const contentJsx = (
@@ -31,6 +32,7 @@ function TodoItem(
                 <Button onClick={onStatusChange}>
                     <StatusButton status={todo.status} />
                 </Button>
+                <Button onClick={onEdit}>EDIT</Button>
                 <Button onClick={onDelete}>
                     <DeleteButton/>
                 </Button>
