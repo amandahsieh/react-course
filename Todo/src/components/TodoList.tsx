@@ -17,8 +17,10 @@ function TodoList() {
         { id: 5, itemName: 'Task 5', dueDate: '2023-10-05', status: 'Not Started' },
         { id: 6, itemName: 'Task 6', dueDate: '2023-10-06', status: 'Progress' },
     ]);
-    const [itemName, setItemName] = useState('');
-    const [dueDate, setDueDate] = useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        dueDate: ''
+    })
     function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archived') {
         const order = ['Not Started', 'Progress', 'Done', 'Archived'];
         const nextIndex = (order.indexOf(currentStatus) + 1) % order.length;
@@ -35,37 +37,37 @@ function TodoList() {
         setTodos(prevTodos => prevTodos.filter((todo) => todo.id !== id));
     }
     function handleAdd() {
-        if (!itemName.trim() || !dueDate.trim()) return;
+        if (!formData.name.trim() || !formData.dueDate.trim()) return;
         const newTodo: Todo = {
             id: Date.now(),
-            itemName,
-            dueDate: "No Due Date",
+            itemName: formData.name,
+            dueDate: formData.dueDate,
             status: 'Not Started',
         };
         setTodos(prev => [...prev, newTodo]);
-        setItemName('');
+        setFormData({ name: '', dueDate: ''});
     }
     return (
         <div className="space-y-4">
             <div className="flex gap-2">
                 <input
                     type="text"
-                    value={itemName}
-                    onChange={(e) => setItemName(e.target.value)}
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
                     placeholder="Add new task"
                     className="border p-2 rounded"
                 />
                 <input
                     type="date"
-                    value={dueDate}
-                    onChange={(e) => setDueDate(e.target.value)}
+                    value={formData.dueDate}
+                    onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
                     placeholder="Set Due Date"
                     className="border p-2 rounded"
                 />
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
                     onClick={handleAdd}
-                    disabled={!itemName.trim() || !dueDate.trim()}
+                    disabled={!formData.name.trim() || !formData.dueDate.trim()}
                 >
                     Add
                 </button>
