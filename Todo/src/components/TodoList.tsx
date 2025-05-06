@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useReducer } from 'react'
 import TodoItem from './TodoItem.tsx'
 import AddTodo from './AddTodo.tsx';
 import EditTodo from './EditTodo.tsx';
@@ -11,15 +11,39 @@ interface Todo {
     status: 'Not Started' | 'Progress' | 'Done' | 'Archived';
 }
 
-function TodoList() {
-    const [todos, setTodos] = useState<Todo[]>([
+interface State {
+    todos: Todo[];
+}
+
+const initialState: State = {
+    todos: [
         { id: 1, itemName: 'Task 1', dueDate: '2023-10-01', status: 'Not Started' },
         { id: 2, itemName: 'Task 2', dueDate: '2023-10-02', status: 'Progress' },
         { id: 3, itemName: 'Task 3', dueDate: '2023-10-03', status: 'Done' },
         { id: 4, itemName: 'Task 4', dueDate: '2023-10-04', status: 'Archived' },
         { id: 5, itemName: 'Task 5', dueDate: '2023-10-05', status: 'Not Started' },
         { id: 6, itemName: 'Task 6', dueDate: '2023-10-06', status: 'Progress' },
-    ]);
+    ]
+}
+
+export type Action = 
+    { type: 'DELETE_TODO'; id: number};
+
+function reducer(state: State, action: Action): State {
+    switch (action.type) {
+        case 'DELETE_TODO':
+            return {
+                ...state,
+                todos: state.todos.filter((t) => t.id !== action.id),
+            };
+        default:
+            return state;
+    }
+}
+
+function TodoList() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const { todos } = state;
     const [formData, setFormData] = useState({
         name: '',
         dueDate: ''
@@ -33,45 +57,42 @@ function TodoList() {
         return order[nextIndex] as 'Not Started' | 'Progress' | 'Done' | 'Archived';
     }
     function handleStatusChange(id: number) {
-        setTodos((prevTodos) =>
-            prevTodos.map((todo) =>
-                todo.id === id ? { ...todo, status: nextStatus(todo.status) } : todo
-            )
-        );
-    }
-    function handleDelete(id: number) {
-        setTodos(prevTodos => prevTodos.filter((todo) => todo.id !== id));
+        // setTodos((prevTodos) =>
+        //     prevTodos.map((todo) =>
+        //         todo.id === id ? { ...todo, status: nextStatus(todo.status) } : todo
+        //     )
+        // );
     }
     function handleAdd() {
-        if (!formData.name.trim() || !formData.dueDate.trim()) return;
-        const newTodo: Todo = {
-            id: Date.now(),
-            itemName: formData.name,
-            dueDate: formData.dueDate,
-            status: 'Not Started',
-        };
-        setTodos(prev => [...prev, newTodo]);
-        setFormData({ name: '', dueDate: ''});
+        // if (!formData.name.trim() || !formData.dueDate.trim()) return;
+        // const newTodo: Todo = {
+        //     id: Date.now(),
+        //     itemName: formData.name,
+        //     dueDate: formData.dueDate,
+        //     status: 'Not Started',
+        // };
+        // setTodos(prev => [...prev, newTodo]);
+        // setFormData({ name: '', dueDate: ''});
     }
     function handleEditStart(todo: Todo){
-        setEditingId(todo.id);
-        setEditForm({ name: todo.itemName, dueDate: todo.dueDate})
+        // setEditingId(todo.id);
+        // setEditForm({ name: todo.itemName, dueDate: todo.dueDate})
     }
     function handleEditSave() {
-        if (!editForm.name.trim() || !editForm.dueDate.trim()) return;
-        setTodos( prev =>
-            prev.map(todo => 
-                todo.id === editingId
-                    ? {...todo, itemName: editForm.name, dueDate: editForm.dueDate}
-                    : todo
-            )
-        );
-        setEditingId(null);
-        setEditForm({ name: '', dueDate: ''});
+        // if (!editForm.name.trim() || !editForm.dueDate.trim()) return;
+        // setTodos( prev =>
+        //     prev.map(todo => 
+        //         todo.id === editingId
+        //             ? {...todo, itemName: editForm.name, dueDate: editForm.dueDate}
+        //             : todo
+        //     )
+        // );
+        // setEditingId(null);
+        // setEditForm({ name: '', dueDate: ''});
     }
     function handleEditCancel() {
-        setEditingId(null);
-        setEditForm({ name: '', dueDate: ''});
+        // setEditingId(null);
+        // setEditForm({ name: '', dueDate: ''});
     }
     return (
         <div className="space-y-4">
@@ -87,7 +108,7 @@ function TodoList() {
                         key={todo.id}
                         todo={todo}
                         onStatusChange={() => handleStatusChange(todo.id)}
-                        onDelete={() => handleDelete(todo.id)}
+                        onDelete={ () => dispatch({ type: 'DELETE_TODO', id: todo.id}) }
                         onEdit={() => handleEditStart(todo)}
                     />
             ))}
