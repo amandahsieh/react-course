@@ -13,6 +13,7 @@ interface Todo {
 
 interface State {
     todos: Todo[];
+    selectedStatus: string;
 }
 
 const initialState: State = {
@@ -23,12 +24,14 @@ const initialState: State = {
         { id: 4, itemName: 'Task 4', dueDate: '2023-10-04', status: 'Archived' },
         { id: 5, itemName: 'Task 5', dueDate: '2023-10-05', status: 'Not Started' },
         { id: 6, itemName: 'Task 6', dueDate: '2023-10-06', status: 'Progress' },
-    ]
+    ],
+    selectedStatus: 'All',
 }
 
 export type Action = 
-      { type: 'DELETE_TODO';    id: number}
-    | { type: 'CHANGE_STATUS';  id: number};
+      { type: 'DELETE_TODO';        id: number}
+    | { type: 'CHANGE_STATUS';      id: number}
+    | { type: 'SET_STATUS_FILTER';  status: string};
 
 function reducer(state: State, action: Action): State {
     switch (action.type) {
@@ -43,7 +46,12 @@ function reducer(state: State, action: Action): State {
                 todos: state.todos.map((t) =>
                     t.id === action.id ? { ...t, status: nextStatus(t.status) } : t
                 ),
-            }
+            };
+        case 'SET_STATUS_FILTER':
+            return {
+                ...state,
+                selectedStatus: action.status,
+            };
         default:
             return state;
     }
@@ -57,14 +65,13 @@ function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archiv
 
 function TodoList() {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { todos } = state;
+    const { todos, selectedStatus } = state;
     const [formData, setFormData] = useState({
         name: '',
         dueDate: ''
     })
     const [editForm, setEditForm] = useState({ name: '', dueDate:'' });
     const [editingId, setEditingId] = useState<number | null>(null);
-    const [selectedStatus, setSelectedStatus] = useState<string>('All');
     function handleAdd() {
         // if (!formData.name.trim() || !formData.dueDate.trim()) return;
         // const newTodo: Todo = {
@@ -102,7 +109,7 @@ function TodoList() {
             {editingId !== null && (
                 <EditTodo editForm={editForm} setEditForm={setEditForm} onSave={handleEditSave} onCancel={handleEditCancel} />
             )}
-            <FilterBar selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus} />
+            <FilterBar selectedStatus={selectedStatus} setSelectedStatus={(status) => dispatch({ type: 'SET_STATUS_FILTER', status})} />
             {todos
                 .filter(todo => selectedStatus === 'All' || todo.status === selectedStatus)
                 .map((todo) => (
