@@ -27,7 +27,8 @@ const initialState: State = {
 }
 
 export type Action = 
-    { type: 'DELETE_TODO'; id: number};
+      { type: 'DELETE_TODO';    id: number}
+    | { type: 'CHANGE_STATUS';  id: number};
 
 function reducer(state: State, action: Action): State {
     switch (action.type) {
@@ -36,9 +37,22 @@ function reducer(state: State, action: Action): State {
                 ...state,
                 todos: state.todos.filter((t) => t.id !== action.id),
             };
+        case 'CHANGE_STATUS':
+            return {
+                ...state,
+                todos: state.todos.map((t) =>
+                    t.id === action.id ? { ...t, status: nextStatus(t.status) } : t
+                ),
+            }
         default:
             return state;
     }
+}
+
+function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archived') {
+    const order = ['Not Started', 'Progress', 'Done', 'Archived'];
+    const nextIndex = (order.indexOf(currentStatus) + 1) % order.length;
+    return order[nextIndex] as 'Not Started' | 'Progress' | 'Done' | 'Archived';
 }
 
 function TodoList() {
@@ -51,18 +65,6 @@ function TodoList() {
     const [editForm, setEditForm] = useState({ name: '', dueDate:'' });
     const [editingId, setEditingId] = useState<number | null>(null);
     const [selectedStatus, setSelectedStatus] = useState<string>('All');
-    function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archived') {
-        const order = ['Not Started', 'Progress', 'Done', 'Archived'];
-        const nextIndex = (order.indexOf(currentStatus) + 1) % order.length;
-        return order[nextIndex] as 'Not Started' | 'Progress' | 'Done' | 'Archived';
-    }
-    function handleStatusChange(id: number) {
-        // setTodos((prevTodos) =>
-        //     prevTodos.map((todo) =>
-        //         todo.id === id ? { ...todo, status: nextStatus(todo.status) } : todo
-        //     )
-        // );
-    }
     function handleAdd() {
         // if (!formData.name.trim() || !formData.dueDate.trim()) return;
         // const newTodo: Todo = {
@@ -107,7 +109,7 @@ function TodoList() {
                     <TodoItem
                         key={todo.id}
                         todo={todo}
-                        onStatusChange={() => handleStatusChange(todo.id)}
+                        onStatusChange={() => dispatch({ type: 'CHANGE_STATUS', id: todo.id })}
                         onDelete={ () => dispatch({ type: 'DELETE_TODO', id: todo.id}) }
                         onEdit={() => handleEditStart(todo)}
                     />
