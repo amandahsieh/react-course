@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import TodoItem from './TodoItem.tsx'
 import AddTodo from './AddTodo.tsx';
-import EditTodo from './EditTodo.tsx'
+import EditTodo from './EditTodo.tsx';
+import FilterBar from './FilterBar.tsx';
 
 interface Todo {
     id: number;
@@ -23,8 +24,9 @@ function TodoList() {
         name: '',
         dueDate: ''
     })
-    const [editForm, setEditForm] = useState({ name: '', dueDate:'' })
+    const [editForm, setEditForm] = useState({ name: '', dueDate:'' });
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [selectedStatus, setSelectedStatus] = useState<string>('All');
     function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archived') {
         const order = ['Not Started', 'Progress', 'Done', 'Archived'];
         const nextIndex = (order.indexOf(currentStatus) + 1) % order.length;
@@ -77,14 +79,17 @@ function TodoList() {
             {editingId !== null && (
                 <EditTodo editForm={editForm} setEditForm={setEditForm} onSave={handleEditSave} onCancel={handleEditCancel} />
             )}
-            {todos.map((todo) => (
-                <TodoItem
-                    key={todo.id}
-                    todo={todo}
-                    onStatusChange={() => handleStatusChange(todo.id)}
-                    onDelete={() => handleDelete(todo.id)}
-                    onEdit={() => handleEditStart(todo)}
-                />
+            <FilterBar selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus} />
+            {todos
+                .filter(todo => selectedStatus === 'All' || todo.status === selectedStatus)
+                .map((todo) => (
+                    <TodoItem
+                        key={todo.id}
+                        todo={todo}
+                        onStatusChange={() => handleStatusChange(todo.id)}
+                        onDelete={() => handleDelete(todo.id)}
+                        onEdit={() => handleEditStart(todo)}
+                    />
             ))}
         </div>
     )
