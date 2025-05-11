@@ -18,12 +18,12 @@ interface State {
 
 const initialState: State = {
     todos: [
-        { id: 1, itemName: 'Task 1', dueDate: '2023-10-01', status: 'Not Started' },
-        { id: 2, itemName: 'Task 2', dueDate: '2023-10-02', status: 'Progress' },
-        { id: 3, itemName: 'Task 3', dueDate: '2023-10-03', status: 'Done' },
-        { id: 4, itemName: 'Task 4', dueDate: '2023-10-04', status: 'Archived' },
-        { id: 5, itemName: 'Task 5', dueDate: '2023-10-05', status: 'Not Started' },
-        { id: 6, itemName: 'Task 6', dueDate: '2023-10-06', status: 'Progress' },
+        { id: 1, itemName: 'Task 1', dueDate: '2025-06-01', status: 'Not Started' },
+        { id: 2, itemName: 'Task 2', dueDate: '2025-07-02', status: 'Progress' },
+        { id: 3, itemName: 'Task 3', dueDate: '2025-08-03', status: 'Done' },
+        { id: 4, itemName: 'Task 4', dueDate: '2025-10-04', status: 'Archived' },
+        { id: 5, itemName: 'Task 5', dueDate: '2025-10-05', status: 'Not Started' },
+        { id: 6, itemName: 'Task 6', dueDate: '2025-10-06', status: 'Progress' },
     ],
     selectedStatus: 'All',
 }
