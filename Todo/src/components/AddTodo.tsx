@@ -1,23 +1,29 @@
+import { Action } from './TodoList.tsx';
+
 interface AddTodoProps {
     formData: {name: string; dueDate: string};
-    setFormData: (data: {name: string; dueDate: string }) => void;
+    dispatch: React.Dispatch<Action>
     onAdd: () => void;
 }
 
-function AddTodo({ formData, setFormData, onAdd }: AddTodoProps) {
+function AddTodo({ formData, dispatch, onAdd }: AddTodoProps) {
     return (
         <div className="flex gap-2">
             <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                onChange={(e) => 
+                    dispatch({type: 'UPDATE_FIELD', field: 'name', value: e.target.value, form: 'formData'})
+                }
                 placeholder="Add new task"
                 className="border p-2 rounded"
             />
             <input
                 type="date"
                 value={formData.dueDate}
-                onChange={(e) => setFormData({...formData, dueDate: e.target.value})}
+                onChange={(e) => 
+                    dispatch({type: 'UPDATE_FIELD', field: 'dueDate', value: e.target.value, form: 'formData'})
+                }
                 placeholder="Set Due Date"
                 className="border p-2 rounded"
             />

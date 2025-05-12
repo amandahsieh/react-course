@@ -14,6 +14,7 @@ interface Todo {
 interface State {
     todos: Todo[];
     selectedStatus: string;
+    formData: { name: string; dueDate: string };
 }
 
 const initialState: State = {
@@ -26,12 +27,15 @@ const initialState: State = {
         { id: 6, itemName: 'Task 6', dueDate: '2025-10-06', status: 'Progress' },
     ],
     selectedStatus: 'All',
+    formData: { name: '', dueDate: ''},
 }
 
 export type Action = 
       { type: 'DELETE_TODO';        id: number}
     | { type: 'CHANGE_STATUS';      id: number}
-    | { type: 'SET_STATUS_FILTER';  status: string};
+    | { type: 'SET_STATUS_FILTER';  status: string}
+    | { type: 'UPDATE_FIELD';       field: 'name' | 'dueDate'; value: string; form: 'formData'}
+    | { type: 'ADD_TODO' };
 
 function reducer(state: State, action: Action): State {
     switch (action.type) {
@@ -52,6 +56,25 @@ function reducer(state: State, action: Action): State {
                 ...state,
                 selectedStatus: action.status,
             };
+        case 'UPDATE_FIELD':
+            return {
+                ...state,
+                [action.form]: {...state[action.form], [action.field]: action.value},
+            };
+        case 'ADD_TODO':
+            return {
+                ...state,
+                todos: [
+                    ...state.todos,
+                    {
+                        id: Date.now(),
+                        itemName: state.formData.name,
+                        dueDate: state.formData.dueDate,
+                        status: 'Not Started',
+                    },
+                ],
+                formData: { name: '', dueDate: ''},
+            }
         default:
             return state;
     }
@@ -65,24 +88,9 @@ function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archiv
 
 function TodoList() {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const { todos, selectedStatus } = state;
-    const [formData, setFormData] = useState({
-        name: '',
-        dueDate: ''
-    })
+    const { todos, selectedStatus, formData } = state;
     const [editForm, setEditForm] = useState({ name: '', dueDate:'' });
     const [editingId, setEditingId] = useState<number | null>(null);
-    function handleAdd() {
-        // if (!formData.name.trim() || !formData.dueDate.trim()) return;
-        // const newTodo: Todo = {
-        //     id: Date.now(),
-        //     itemName: formData.name,
-        //     dueDate: formData.dueDate,
-        //     status: 'Not Started',
-        // };
-        // setTodos(prev => [...prev, newTodo]);
-        // setFormData({ name: '', dueDate: ''});
-    }
     function handleEditStart(todo: Todo){
         // setEditingId(todo.id);
         // setEditForm({ name: todo.itemName, dueDate: todo.dueDate})
@@ -105,7 +113,7 @@ function TodoList() {
     }
     return (
         <div className="space-y-4">
-            <AddTodo formData={formData} setFormData={setFormData} onAdd={handleAdd} />
+            <AddTodo formData={formData} dispatch={dispatch} onAdd={() => dispatch({ type: 'ADD_TODO' })} />
             {editingId !== null && (
                 <EditTodo editForm={editForm} setEditForm={setEditForm} onSave={handleEditSave} onCancel={handleEditCancel} />
             )}
