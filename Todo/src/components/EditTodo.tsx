@@ -1,23 +1,24 @@
+import { Action } from './TodoList.tsx'
 interface EditTodoProps {
     editForm: { name:string; dueDate: string};
-    setEditForm: ( data: { name:string; dueDate: string}) => void;
+    dispatch: React.Dispatch<Action>;
     onSave: () => void;
     onCancel: () => void;
 }
 
-function EditTodo({ editForm, setEditForm, onSave, onCancel }: EditTodoProps) {
+function EditTodo({ editForm, dispatch, onSave, onCancel }: EditTodoProps) {
     return (
         <div className="flex gap-2 bg-yellow-100 p-2 rounded">
                     <input 
                         type="text"
                         value={editForm.name}
-                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value})}
+                        onChange={(e) => dispatch({type: 'UPDATE_FIELD', field: 'name', value: e.target.value, form: 'editForm'})}
                         className="border p-2 rounded w-64"
                     />
                     <input 
                         type="date"
                         value={editForm.dueDate}
-                        onChange={(e) => setEditForm({ ...editForm, dueDate: e.target.value})}
+                        onChange={(e) => dispatch({type: 'UPDATE_FIELD', field: 'dueDate', value: e.target.value, form: 'editForm'})}
                         className="border p-2 rounded w-48"
                     />
                     <button
