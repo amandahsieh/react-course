@@ -1,5 +1,5 @@
-import TodoList from '../components/TodoList.tsx';
-import NavBar from '../components/NavBar.tsx';
+import TodoList from '../components/TodoList';
+import NavBar from '../components/NavBar';
 
 function TodosPage() {
   return (

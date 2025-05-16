@@ -1,5 +1,5 @@
-import DeleteButton from "./DeleteButton.tsx";
-import StatusButton from "./StatusButton.tsx";
+import DeleteButton from "./DeleteButton";
+import StatusButton from "./StatusButton";
 
 function Button( { onClick, children }: { onClick?: () => void, children: React.ReactNode }) {
     return (

@@ -8,7 +8,7 @@ const router = createBrowserRouter([
     { path: '/todos', element: <TodosPage /> },
     {
         path: '/todos/:id',
-        element: <DetailPage todos={[]} />
+        element: <DetailPage />
     },
 ])
 

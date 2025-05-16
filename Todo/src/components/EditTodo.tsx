@@ -1,4 +1,4 @@
-import { Action } from './TodoList.tsx'
+import { Action } from '../TodoContext';
 interface EditTodoProps {
     editForm: { name:string; dueDate: string};
     dispatch: React.Dispatch<Action>;

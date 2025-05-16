@@ -1,4 +1,4 @@
-import { Action } from './TodoList.tsx';
+import { Action } from '../TodoContext';
 
 interface AddTodoProps {
     formData: {name: string; dueDate: string};

@@ -1,19 +1,10 @@
 import { useParams } from 'react-router-dom';
+import { useTodoContext } from '../TodoContext';
 
-interface Todo {
-    id: number;
-    itemName: string;
-    dueDate: string;
-    status: 'Not Started' | 'Progress' | 'Done' | 'Archived';
-}
-
-interface Props {
-    todos: Todo[];
-}
-
-function DetailPage({ todos }: Props) {
+function DetailPage() {
     const { id } = useParams();
-    const todo = todos.find(t => t.id === Number(id));
+    const { state } = useTodoContext();
+    const todo = state.todos.find(t => t.id === Number(id));
     if (!todo) return <div className="p-4 text-red-500">Can't Find the Todo Item</div>;
     return (
         <div>
