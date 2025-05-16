@@ -5,6 +5,8 @@ export interface Todo {
     itemName: string;
     dueDate: string;
     status: 'Not Started' | 'Progress' | 'Done' | 'Archived';
+    createdAt: string;
+    updatedAt?: string;
 }
 
 interface State {
@@ -16,12 +18,12 @@ interface State {
 }
 const initialState: State = {
     todos: [
-        { id: 1, itemName: 'Task 1', dueDate: '2025-05-13', status: 'Not Started' },
-        { id: 2, itemName: 'Task 2', dueDate: '2025-06-02', status: 'Progress' },
-        { id: 3, itemName: 'Task 3', dueDate: '2025-07-03', status: 'Done' },
-        { id: 4, itemName: 'Task 4', dueDate: '2025-08-04', status: 'Archived' },
-        { id: 5, itemName: 'Task 5', dueDate: '2025-10-05', status: 'Not Started' },
-        { id: 6, itemName: 'Task 6', dueDate: '2025-10-06', status: 'Progress' },
+        { id: 1, itemName: 'Task 1', dueDate: '2025-05-13', status: 'Not Started', createdAt: '2025-04-16' },
+        { id: 2, itemName: 'Task 2', dueDate: '2025-06-02', status: 'Progress', createdAt: '2025-04-18' },
+        { id: 3, itemName: 'Task 3', dueDate: '2025-07-03', status: 'Done', createdAt: '2025-05-02' },
+        { id: 4, itemName: 'Task 4', dueDate: '2025-08-04', status: 'Archived', createdAt: '2025-05-06' },
+        { id: 5, itemName: 'Task 5', dueDate: '2025-10-05', status: 'Not Started', createdAt: '2025-05-10' },
+        { id: 6, itemName: 'Task 6', dueDate: '2025-10-06', status: 'Progress', createdAt: '2025-05-14' },
     ],
     selectedStatus: 'All',
     formData: { name: '', dueDate: ''},
@@ -56,7 +58,7 @@ function reducer(state: State, action: Action): State {
             return {
                 ...state,
                 todos: state.todos.map((t) =>
-                    t.id === action.id ? { ...t, status: nextStatus(t.status) } : t
+                    t.id === action.id ? { ...t, status: nextStatus(t.status), updatedAt: new Date().toLocaleString('zh-tw') } : t
                 ),
             };
         case 'SET_STATUS_FILTER':
@@ -80,6 +82,7 @@ function reducer(state: State, action: Action): State {
                         itemName: state.formData.name,
                         dueDate: state.formData.dueDate,
                         status: 'Not Started',
+                        createdAt: new Date().toLocaleString('zh-tw')
                     },
                 ],
                 formData: { name: '', dueDate: ''},
@@ -96,7 +99,7 @@ function reducer(state: State, action: Action): State {
                 ...state,
                 todos: state.todos.map((t) => 
                     t.id === state.editingId
-                        ? {...t, itemName: state.editForm.name, dueDate: state.editForm.dueDate }
+                        ? {...t, itemName: state.editForm.name, dueDate: state.editForm.dueDate, updatedAt: new Date().toLocaleString('zh-tw') }
                         : t
                 ),
                 editingId: null,
