@@ -1,5 +1,6 @@
-import { useReducer } from 'react'
-import TodoItem from './TodoItem.tsx'
+import { useReducer } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TodoItem from './TodoItem.tsx';
 import AddTodo from './AddTodo.tsx';
 import EditTodo from './EditTodo.tsx';
 import FilterBar from './FilterBar.tsx';
@@ -121,6 +122,7 @@ function nextStatus(currentStatus: 'Not Started' | 'Progress' | 'Done' | 'Archiv
 function TodoList() {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { todos, selectedStatus, formData, editForm, editingId } = state;
+    const navigate = useNavigate();
     return (
         <div className="space-y-4">
             <AddTodo formData={formData} dispatch={dispatch} onAdd={() => dispatch({ type: 'ADD_TODO' })} />
@@ -133,13 +135,15 @@ function TodoList() {
             {todos
                 .filter(todo => selectedStatus === 'All' || todo.status === selectedStatus)
                 .map((todo) => (
-                    <TodoItem
-                        key={todo.id}
-                        todo={todo}
-                        onStatusChange={() => dispatch({ type: 'CHANGE_STATUS', id: todo.id })}
-                        onDelete={ () => dispatch({ type: 'DELETE_TODO', id: todo.id}) }
-                        onEdit={() => dispatch({ type: 'START_EDIT', todo: todo})}
-                    />
+                    <div key={todo.id} className="cursor-pointer" onClick={() => navigate(`/todos/${todo.id}`)}>
+                        <TodoItem
+                            key={todo.id}
+                            todo={todo}
+                            onStatusChange={() => dispatch({ type: 'CHANGE_STATUS', id: todo.id })}
+                            onDelete={ () => dispatch({ type: 'DELETE_TODO', id: todo.id}) }
+                            onEdit={() => dispatch({ type: 'START_EDIT', todo: todo})}
+                        />
+                    </div>
             ))}
         </div>
     )
